@@ -5,6 +5,7 @@ public class Conta {
 	private String numero;
 	private double saldo;
 	private Cliente cliente;
+	private String senha;
 	
 	public Conta() {
 	}
@@ -37,6 +38,14 @@ public class Conta {
 	
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+	
+	public void setSenha(String senha) {
+		this.senha = SenhaUtil.gerarHash(senha);
 	}
 	
 	public void creditar(double valor) {

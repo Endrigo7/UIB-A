@@ -24,9 +24,15 @@ public class UIBMain {
 				Conta conta = montarConta();
 				contas[totalDeContas] = conta;
 				totalDeContas++;
-
 				break;
 			case 2:
+				Conta contaPesquisa = buscarConta(contas);
+				if (contaPesquisa == null) {
+					System.out.println("Conta não encontrada");
+				} else {
+					System.out.println("Seu saldo é :" + contaPesquisa.getSaldo());
+				}
+
 				break;
 			default:
 				System.out.println("Opção digitada não é valida!");
@@ -37,12 +43,35 @@ public class UIBMain {
 		leTeclado.close();
 	}
 
+	private static Conta buscarConta(Conta[] contas) {
+		Scanner leTeclado = new Scanner(System.in);
+
+		System.out.println("Por favor digita a sua conta");
+		String numero = leTeclado.next();
+
+		System.out.println("Por favor digita a sua senha");
+		String senha = leTeclado.next();
+		for (Conta conta : contas) {
+			if(conta != null) {
+				String senhaHash = SenhaUtil.gerarHash(senha);
+
+				if (conta.getNumero().equals(numero) //
+						&& conta.getSenha().equals(senhaHash)) {
+					return conta;
+				}
+			}
+		}
+
+		return null;
+	}
+
 	private static void imprimeMenu() {
 		System.out.println("[1] - Abrir Conta");
-		System.out.println("[2] - creditar em conta");
-		System.out.println("[3] - debitar em conta");
-		System.out.println("[4] - consulta saldo");
-		System.out.println("[5] - sair");
+		System.out.println("[2] - consulta saldo");
+		System.out.println("[3] - creditar em conta");
+		System.out.println("[4] - debitar em conta");
+		System.out.println("[5] - Transferir");
+		System.out.println("[6] - sair");
 	}
 
 	private static Cliente montarCliente() {
@@ -61,16 +90,23 @@ public class UIBMain {
 
 	private static Conta montarConta() {
 		Scanner leTeclado = new Scanner(System.in);
-		
+
 		Conta conta = new Conta();
 		Cliente cliente = montarCliente();
 		conta.setCliente(cliente);
-		
+
 		System.out.println("Digite o valor do deposito inicial");
 		double valor = leTeclado.nextDouble();
 		conta.setSaldo(valor);
-		conta.setNumero(Conta.gerarNumero());
-		
+
+		String numero = Conta.gerarNumero();
+		System.out.println("O numero da sua conta eh: " + numero);
+		conta.setNumero(numero);
+
+		System.out.println("Digite a senha da conta");
+		String senha = leTeclado.next();
+		conta.setSenha(senha);
+
 		return conta;
 	}
 }
