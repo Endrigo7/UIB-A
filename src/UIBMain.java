@@ -16,24 +16,15 @@ public class UIBMain {
 
 		int opcao = -1;
 		do {
-			System.out.println("[1] - Abrir Conta");
-			System.out.println("[2] - creditar em conta");
-			System.out.println("[3] - debitar em conta");
-			System.out.println("[4] - consulta saldo");
-			System.out.println("[5] - sair");
-			
+			imprimeMenu();
 			opcao = leTeclado.nextInt();
-			
+
 			switch (opcao) {
 			case 1:
-				Cliente cliente = montarCliente();
-				
 				Conta conta = montarConta();
-				conta.setCliente(cliente);
-				
 				contas[totalDeContas] = conta;
 				totalDeContas++;
-				
+
 				break;
 			case 2:
 				break;
@@ -44,6 +35,14 @@ public class UIBMain {
 		} while (opcao != 7);
 
 		leTeclado.close();
+	}
+
+	private static void imprimeMenu() {
+		System.out.println("[1] - Abrir Conta");
+		System.out.println("[2] - creditar em conta");
+		System.out.println("[3] - debitar em conta");
+		System.out.println("[4] - consulta saldo");
+		System.out.println("[5] - sair");
 	}
 
 	private static Cliente montarCliente() {
@@ -59,14 +58,16 @@ public class UIBMain {
 
 		return cliente;
 	}
-	
+
 	private static Conta montarConta() {
 		Scanner leTeclado = new Scanner(System.in);
 		
+		Conta conta = new Conta();
+		Cliente cliente = montarCliente();
+		conta.setCliente(cliente);
+		
 		System.out.println("Digite o valor do deposito inicial");
 		double valor = leTeclado.nextDouble();
-		
-		Conta conta = new Conta();
 		conta.setSaldo(valor);
 		conta.setNumero(Conta.gerarNumero());
 		
