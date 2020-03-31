@@ -34,13 +34,69 @@ public class UIBMain {
 				}
 
 				break;
+			case 3:
+				contaPesquisa = buscarConta(contas);
+				if (contaPesquisa == null) {
+					System.out.println("Conta não encontrada");
+				} else {
+					System.out.println("Digite o valor do credito");
+					double valor = leTeclado.nextDouble();
+					
+					contaPesquisa.creditar(valor);
+				}
+
+				break;	
+			case 4:
+				contaPesquisa = buscarConta(contas);
+				if (contaPesquisa == null) {
+					System.out.println("Conta não encontrada");
+				} else {
+					System.out.println("Digite o valor do debitar");
+					double valor = leTeclado.nextDouble();
+					
+					contaPesquisa.debitar(valor);
+				}
+
+				break;		
+			case 5:
+				contaPesquisa = buscarConta(contas);
+				if(contaPesquisa == null) {
+					System.out.println("Conta não encontrada");
+				}else {
+					System.out.println("Digite o numero da Conta que recebera o credito");
+					String numero = leTeclado.next();
+					Conta contaAReceberOCredito = buscarConta(numero, contas);
+					if(contaAReceberOCredito == null) {
+						System.out.println("Conta de destino nao encontrada");
+					}else {
+						System.out.println("Digite o valor a ser transferido");
+						double valor = leTeclado.nextDouble();
+						contaPesquisa.transferir(contaAReceberOCredito, valor);
+					}
+				}
+				break;
+			case 6:
+				System.out.println("Obrigado por usar o UIB!");
+				break;
 			default:
 				System.out.println("Opção digitada não é valida!");
 				break;
 			}
-		} while (opcao != 7);
+		} while (opcao != 6);
 
 		leTeclado.close();
+	}
+	
+	private static Conta buscarConta(String numero, Conta[] contas) {
+		for (Conta conta : contas) {
+			if(conta != null) {
+				if (conta.getNumero().equals(numero)) {
+					return conta;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	private static Conta buscarConta(Conta[] contas) {
