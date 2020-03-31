@@ -1,8 +1,14 @@
+package br.unit.uib;
+
+import static br.unit.uib.util.Constantes.*;
+
 import java.util.Scanner;
 
-public class UIBMain {
+import br.unit.uib.entidades.Cliente;
+import br.unit.uib.entidades.Conta;
+import br.unit.uib.util.SenhaUtil;
 
-	private static final int TOTAL_CONTA = 2;
+public class UIBMain {
 
 	public static void main(String[] args) {
 		Scanner leTeclado = new Scanner(System.in);
@@ -20,76 +26,85 @@ public class UIBMain {
 			opcao = leTeclado.nextInt();
 
 			switch (opcao) {
-			case 1:
+			case OPCAO_CADASTRAR_CONTA:
 				Conta conta = montarConta();
 				contas[totalDeContas] = conta;
 				totalDeContas++;
 				break;
-			case 2:
-				Conta contaPesquisa = buscarConta(contas);
-				if (contaPesquisa == null) {
-					System.out.println("Conta não encontrada");
-				} else {
-					System.out.println("Seu saldo é :" + contaPesquisa.getSaldo());
+			case OPCAO_CONSULTAR_SALDO:
+				Conta contaPesquisada = buscarConta(contas);
+				if (contaPesquisada != null) {
+					System.out.println("Seu saldo é :" + contaPesquisada.getSaldo());
 				}
 
 				break;
-			case 3:
-				contaPesquisa = buscarConta(contas);
-				if (contaPesquisa == null) {
-					System.out.println("Conta não encontrada");
-				} else {
-					System.out.println("Digite o valor do credito");
-					double valor = leTeclado.nextDouble();
-					
-					contaPesquisa.creditar(valor);
+			case OPCAO_CREDITAR:
+				contaPesquisada = buscarConta(contas);
+				if (contaPesquisada != null) {
+					creditar(contaPesquisada);
 				}
 
-				break;	
-			case 4:
-				contaPesquisa = buscarConta(contas);
-				if (contaPesquisa == null) {
-					System.out.println("Conta não encontrada");
-				} else {
-					System.out.println("Digite o valor do debitar");
-					double valor = leTeclado.nextDouble();
-					
-					contaPesquisa.debitar(valor);
-				}
-
-				break;		
-			case 5:
-				contaPesquisa = buscarConta(contas);
-				if(contaPesquisa == null) {
-					System.out.println("Conta não encontrada");
-				}else {
-					System.out.println("Digite o numero da Conta que recebera o credito");
-					String numero = leTeclado.next();
-					Conta contaAReceberOCredito = buscarConta(numero, contas);
-					if(contaAReceberOCredito == null) {
-						System.out.println("Conta de destino nao encontrada");
-					}else {
-						System.out.println("Digite o valor a ser transferido");
-						double valor = leTeclado.nextDouble();
-						contaPesquisa.transferir(contaAReceberOCredito, valor);
-					}
+				break;
+			case OPCAO_DEBITAR:
+				contaPesquisada = buscarConta(contas);
+				if (contaPesquisada != null) {
+					debitar(contaPesquisada);
 				}
 				break;
-			case 6:
+			case OPCAO_TRANSFERIR:
+				contaPesquisada = buscarConta(contas);
+				if (contaPesquisada != null) {
+					transferir(contaPesquisada, contas);
+				}
+				break;
+			case OPCAO_SAIR:
 				System.out.println("Obrigado por usar o UIB!");
 				break;
 			default:
 				System.out.println("Opção digitada não é valida!");
 				break;
 			}
-		} while (opcao != 6);
+		} while (opcao != OPCAO_SAIR);
 
 		leTeclado.close();
 	}
 	
+	private static void transferir(Conta conta, Conta[] contas) {
+		Scanner leTeclado = new Scanner(System.in);
+		
+		System.out.println("Digite o numero da Conta que recebera o credito");
+		String numero = leTeclado.next();
+		Conta contaAReceberOCredito = buscarConta(numero, contas);
+
+		if (contaAReceberOCredito == null) {
+			System.out.println("Conta de destino nao encontrada");
+		} else {
+			System.out.println("Digite o valor a ser transferido");
+			double valor = leTeclado.nextDouble();
+			conta.transferir(contaAReceberOCredito, valor);
+		}
+	}
+
+	private static void debitar(Conta conta) {
+		Scanner leTeclado = new Scanner(System.in);
+
+		System.out.println("Digite o valor do debitar");
+		double valor = leTeclado.nextDouble();
+		conta.debitar(valor);
+	}
+
+	private static void creditar(Conta conta) {
+		Scanner leTeclado = new Scanner(System.in);
+
+		System.out.println("Digite o valor do credito");
+		double valor = leTeclado.nextDouble();
+
+		conta.creditar(valor);
+	}
+
 	private static Conta buscarConta(String numero, Conta[] contas) {
 		for (Conta conta : contas) {
-			if(conta != null) {
+			if (conta != null) {
 				if (conta.getNumero().equals(numero)) {
 					return conta;
 				}
@@ -108,7 +123,7 @@ public class UIBMain {
 		System.out.println("Por favor digita a sua senha");
 		String senha = leTeclado.next();
 		for (Conta conta : contas) {
-			if(conta != null) {
+			if (conta != null) {
 				String senhaHash = SenhaUtil.gerarHash(senha);
 
 				if (conta.getNumero().equals(numero) //
@@ -118,6 +133,7 @@ public class UIBMain {
 			}
 		}
 
+		System.out.println("Conta não encontrada");
 		return null;
 	}
 
@@ -147,8 +163,9 @@ public class UIBMain {
 	private static Conta montarConta() {
 		Scanner leTeclado = new Scanner(System.in);
 
-		Conta conta = new Conta();
 		Cliente cliente = montarCliente();
+
+		Conta conta = new Conta();
 		conta.setCliente(cliente);
 
 		System.out.println("Digite o valor do deposito inicial");

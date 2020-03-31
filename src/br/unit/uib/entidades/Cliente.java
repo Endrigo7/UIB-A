@@ -1,3 +1,4 @@
+package br.unit.uib.entidades;
 public class Cliente {
 
 	private String cpf;

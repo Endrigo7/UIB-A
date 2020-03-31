@@ -1,4 +1,7 @@
+package br.unit.uib.entidades;
 import java.util.UUID;
+
+import br.unit.uib.util.SenhaUtil;
 
 public class Conta {
 

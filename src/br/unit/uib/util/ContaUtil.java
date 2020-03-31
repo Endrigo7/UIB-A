@@ -1,3 +1,4 @@
+package br.unit.uib.util;
 
 public class ContaUtil {
 	
