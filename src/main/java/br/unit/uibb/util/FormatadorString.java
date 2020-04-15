@@ -1,4 +1,4 @@
-package br.unit.uib.util;
+package br.unit.uibb.util;
 import java.util.Scanner;
 
 public class FormatadorString {

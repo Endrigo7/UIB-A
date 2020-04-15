@@ -1,14 +1,22 @@
-package br.unit.uib.entidades;
+package br.unit.uibb.entidades;
 public class Cliente {
-
-	private String cpf;
+	
 	private String nome;
+	private String cpf;
 	
 	public Cliente() {
 	}
 	
-	public Cliente(String cpf, String nome) {
+	public Cliente(String nome, String cpf) {
+		this.nome = nome;
 		this.cpf = cpf;
+	}
+	
+	public String getNome() {
+		return nome;
+	}
+	
+	public void setNome(String nome) {
 		this.nome = nome;
 	}
 	
@@ -20,11 +28,5 @@ public class Cliente {
 		this.cpf = cpf;
 	}
 	
-	public String getNome() {
-		return nome;
-	}
 	
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
 }
