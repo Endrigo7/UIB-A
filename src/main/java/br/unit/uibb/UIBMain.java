@@ -5,25 +5,26 @@ import static br.unit.uibb.Constantes.CONSULTA_SALDO;
 import static br.unit.uibb.Constantes.CREDITAR;
 import static br.unit.uibb.Constantes.DEBITAR;
 import static br.unit.uibb.Constantes.SAIR;
-import static br.unit.uibb.Constantes.TOTAL_CONTAS;
 import static br.unit.uibb.Constantes.TRANSFERIR;
 
 import java.util.Scanner;
 
 import br.unit.uibb.entidades.Cliente;
 import br.unit.uibb.entidades.Conta;
+import br.unit.uibb.repository.RepositorioContasArray;
 import br.unit.uibb.util.SenhaUtil;
 
 public class UIBMain {
 
+	private static RepositorioContasArray repositorioContasArray = new RepositorioContasArray();
+	private static Scanner leTeclado = new Scanner(System.in);
+
 	public static void main(String[] args) {
 		Scanner leTeclado = new Scanner(System.in);
-		Conta[] contas = new Conta[TOTAL_CONTAS];
 
 		System.out.println("Bem vindo ao Unit Internet Bank");
 		System.out.println("-------------------------------");
 
-		int indice = 0;
 		int opcao = -1;
 		do {
 			imprimeMenu();
@@ -32,20 +33,19 @@ public class UIBMain {
 			switch (opcao) {
 			case ABRIR_CONTA:
 				Conta conta = montaConta();
+				repositorioContasArray.inserir(conta);
+				
 				System.out.println("O numero da sua conta eh: " + conta.getNumero());
-
-				contas[indice] = conta;
-				indice++;
 				break;
 			case CONSULTA_SALDO:
-				conta = buscarConta(contas);
+				conta = buscarConta();
 				if (conta != null) {
 					System.out.println("seu saldo eh:" + conta.getSaldo());
 				}
 
 				break;
 			case CREDITAR:
-				conta = buscarConta(contas);
+				conta = buscarConta();
 				if (conta != null) {
 					System.out.println("Digite o valor");
 					double valor = leTeclado.nextDouble();
@@ -55,7 +55,7 @@ public class UIBMain {
 
 				break;
 			case DEBITAR:
-				conta = buscarConta(contas);
+				conta = buscarConta();
 				if (conta != null) {
 					System.out.println("Digite o valor");
 					double valor = leTeclado.nextDouble();
@@ -65,9 +65,9 @@ public class UIBMain {
 
 				break;
 			case TRANSFERIR:
-				conta = buscarConta(contas);
+				conta = buscarConta();
 				if (conta != null) {
-					Conta contaDestino = buscarContaDestino(contas);
+					Conta contaDestino = buscarContaDestino();
 
 					if (contaDestino != null) {
 						System.out.println("Digite o valor");
@@ -88,7 +88,7 @@ public class UIBMain {
 			}
 
 		} while (opcao != SAIR);
-		
+
 		leTeclado.close();
 	}
 
@@ -102,8 +102,6 @@ public class UIBMain {
 	}
 
 	private static Cliente montaCliente() {
-		Scanner leTeclado = new Scanner(System.in);
-
 		System.out.println("Digite o cpf do Cliente");
 		String cpf = leTeclado.next();
 
@@ -115,8 +113,6 @@ public class UIBMain {
 	}
 
 	private static Conta montaConta() {
-		Scanner leTeclado = new Scanner(System.in);
-
 		Cliente cliente = montaCliente();
 
 		System.out.println("Digite a sua senha");
@@ -132,9 +128,7 @@ public class UIBMain {
 		return conta;
 	}
 
-	private static Conta buscarConta(Conta[] contas) {
-		Scanner leTeclado = new Scanner(System.in);
-
+	private static Conta buscarConta() {
 		System.out.println("Digite o numero da Conta");
 		String numero = leTeclado.next();
 
@@ -142,31 +136,23 @@ public class UIBMain {
 		String senha = leTeclado.next();
 		String senhaHash = SenhaUtil.geraHash(senha);
 
-		for (Conta conta : contas) {
-			if (conta != null) {
-				if (conta.getNumero().equals(numero) //
-						&& conta.getSenha().equals(senhaHash)) {
-					return conta;
-				}
-			}
+		Conta conta = repositorioContasArray.procurar(numero, senhaHash);
+		if (conta != null) {
+			return conta;
 		}
 
 		System.out.println("Conta " + numero + " não encontrada!");
 		return null;
 	}
 
-	private static Conta buscarContaDestino(Conta[] contas) {
-		Scanner leTeclado = new Scanner(System.in);
-
-		System.out.println("Digite o numero da Conta");
+	private static Conta buscarContaDestino() {
+		System.out.println("Digite o numero da Conta Destino");
 		String numero = leTeclado.next();
 
-		for (Conta conta : contas) {
-			if (conta != null) {
-				if (conta.getNumero().equals(numero)) {
-					return conta;
-				}
-			}
+		Conta conta = repositorioContasArray.procurar(numero);
+
+		if (conta != null) {
+			return conta;
 		}
 
 		System.out.println("Conta " + numero + " não encontrada!");

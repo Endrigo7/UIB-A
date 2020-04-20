@@ -16,7 +16,6 @@ public class SenhaUtil {
 		}catch(Exception e) {
 		}
 	    
-		System.out.println("senha no hash: " + senhaHash);
 		return senhaHash;
 	}
 	
