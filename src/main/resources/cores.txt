@@ -1,5 +1,5 @@
 azul
-amerelo
+amarelo
 verde
 preto
 branco
@@ -11,4 +11,4 @@ magenta
 roxo
 rosa choque
 verde limao
-ciano 
+ciano

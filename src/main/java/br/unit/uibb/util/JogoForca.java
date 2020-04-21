@@ -105,7 +105,7 @@ public class JogoForca {
 	}
 
 	private List<String> getPossibilidadesChave(String nomeArquivo) {
-		List<String> cores = new ArrayList<>();
+		List<String> possibilidades = new ArrayList<>();
 
 		InputStream stream = getClass()
 				.getClassLoader().getResourceAsStream(nomeArquivo);
@@ -115,12 +115,12 @@ public class JogoForca {
 		leArquivo = new Scanner(stream);
 
 		while (leArquivo.hasNextLine()) {
-			String cor = leArquivo.nextLine();
-			cores.add(cor);
+			String item = leArquivo.nextLine();
+			possibilidades.add(item);
 		}
 
 		leArquivo.close();
-		return cores;
+		return possibilidades;
 	}
 	
 	private void exibeMenu() {
