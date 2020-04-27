@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import br.unit.uibb.entidades.Conta;
 
-public class RepositorioContasArray {
+public class ContasArrayDAO {
 
 	private static final int CONTA_NAO_ENCONTRADA = -1;
 	private static final int TOTAL_CONTAS = 10;
@@ -15,7 +15,7 @@ public class RepositorioContasArray {
 	public Conta[] contas = new Conta[TOTAL_CONTAS];
 	private int posicao;
 
-	public RepositorioContasArray() {
+	public ContasArrayDAO() {
 		posicao = 0;
 	}
 
@@ -92,7 +92,9 @@ public class RepositorioContasArray {
 		List<Conta> contasDoCliente = new ArrayList<>();
 
 		for (Conta conta : contas) {
-			if ((conta != null) && (cpf.equals(conta.getCliente().getCpf()))) {
+			if ((conta != null) && //
+					(conta.getCliente() != null) && //
+					(cpf.equals(conta.getCliente().getCpf()))) {
 				contasDoCliente.add(conta);
 			}
 		}
@@ -104,7 +106,9 @@ public class RepositorioContasArray {
 		List<Conta> contasDoCliente = Arrays //
 				.asList(contas) //
 				.stream() //
-				.filter(conta -> (conta != null) && (cpf.equals(conta.getCliente().getCpf()))) //
+				.filter(conta -> (conta != null) && //
+						(conta.getCliente() != null) && //
+						(cpf.equals(conta.getCliente().getCpf()))) //
 				.collect(Collectors.toList());
 		return contasDoCliente;
 	}

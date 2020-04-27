@@ -11,12 +11,12 @@ import java.util.Scanner;
 
 import br.unit.uibb.entidades.Cliente;
 import br.unit.uibb.entidades.Conta;
-import br.unit.uibb.repository.RepositorioContasArray;
+import br.unit.uibb.repository.ContasArrayDAO;
 import br.unit.uibb.util.SenhaUtil;
 
 public class UIBMain {
 
-	private static RepositorioContasArray repositorioContasArray = new RepositorioContasArray();
+	private static ContasArrayDAO repositorioContasArray = new ContasArrayDAO();
 	private static Scanner leTeclado = new Scanner(System.in);
 
 	public static void main(String[] args) {

@@ -15,7 +15,7 @@ import br.unit.uibb.entidades.Conta;
 
 public class RepositorioContasArrayTest {
 	
-	private RepositorioContasArray repositorioContasArray;
+	private ContasArrayDAO repositorioContasArray;
 	
 	private List<Conta> getContasDummy() {
 		Cliente clienteComMaisDe1Conta = new Cliente("Jair", "2");
@@ -31,7 +31,7 @@ public class RepositorioContasArrayTest {
 	
 	@Before
 	public void setup() {
-		repositorioContasArray = new RepositorioContasArray();
+		repositorioContasArray = new ContasArrayDAO();
 		getContasDummy().forEach(conta -> repositorioContasArray.inserir(conta));
 	}
 	
