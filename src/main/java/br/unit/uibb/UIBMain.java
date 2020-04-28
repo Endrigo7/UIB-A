@@ -4,19 +4,20 @@ import static br.unit.uibb.Constantes.ABRIR_CONTA;
 import static br.unit.uibb.Constantes.CONSULTA_SALDO;
 import static br.unit.uibb.Constantes.CREDITAR;
 import static br.unit.uibb.Constantes.DEBITAR;
+import static br.unit.uibb.Constantes.LISTA_TODAS_AS_CONTAS_CLIENTE;
 import static br.unit.uibb.Constantes.SAIR;
 import static br.unit.uibb.Constantes.TRANSFERIR;
 
+import java.util.List;
 import java.util.Scanner;
 
+import br.unit.uibb.controller.ContaController;
 import br.unit.uibb.entidades.Cliente;
 import br.unit.uibb.entidades.Conta;
-import br.unit.uibb.repository.ContasArrayDAO;
-import br.unit.uibb.util.SenhaUtil;
 
 public class UIBMain {
 
-	private static ContasArrayDAO repositorioContasArray = new ContasArrayDAO();
+	private static ContaController contaController = new ContaController();
 	private static Scanner leTeclado = new Scanner(System.in);
 
 	public static void main(String[] args) {
@@ -33,48 +34,62 @@ public class UIBMain {
 			switch (opcao) {
 			case ABRIR_CONTA:
 				Conta conta = montaConta();
-				repositorioContasArray.inserir(conta);
-				
-				System.out.println("O numero da sua conta eh: " + conta.getNumero());
+				boolean ok = contaController.inserir(conta);
+
+				if (ok) {
+					System.out.println("O numero da sua conta eh: " + conta.getNumero());
+				}
+
 				break;
 			case CONSULTA_SALDO:
-				conta = buscarConta();
-				if (conta != null) {
-					System.out.println("seu saldo eh:" + conta.getSaldo());
+				ContaDTO contaDTO = transacaoComNumeroESenha();
+
+				Double saldo = contaController.consultarSaldo(contaDTO.getNumero(), contaDTO.getSenha());
+
+				if (saldo != null) {
+					System.out.println("Seu saldo é: " + saldo);
+				} else {
+					System.out.println("Conta náo encontrada!");
 				}
 
 				break;
 			case CREDITAR:
-				conta = buscarConta();
-				if (conta != null) {
-					System.out.println("Digite o valor");
-					double valor = leTeclado.nextDouble();
+				contaDTO = transacaoComNumeroESenha();
 
-					conta.creditar(valor);
-				}
+				System.out.println("Digite o valor");
+				double valor = leTeclado.nextDouble();
 
+				contaController.creditar(contaDTO.getNumero(), contaDTO.getSenha(), valor);
 				break;
 			case DEBITAR:
-				conta = buscarConta();
-				if (conta != null) {
-					System.out.println("Digite o valor");
-					double valor = leTeclado.nextDouble();
+				contaDTO = transacaoComNumeroESenha();
 
-					conta.debitar(valor);
-				}
+				System.out.println("Digite o valor");
+				valor = leTeclado.nextDouble();
 
+				contaController.debitar(contaDTO.getNumero(), contaDTO.getSenha(), valor);
 				break;
 			case TRANSFERIR:
-				conta = buscarConta();
-				if (conta != null) {
-					Conta contaDestino = buscarContaDestino();
+				contaDTO = transacaoComNumeroESenha();
 
-					if (contaDestino != null) {
-						System.out.println("Digite o valor");
-						double valor = leTeclado.nextDouble();
+				System.out.println("Digite o numero da Conta Destino");
+				String destino = leTeclado.next();
 
-						conta.transferir(contaDestino, valor);
-					}
+				System.out.println("Digite o valor");
+				valor = leTeclado.nextDouble();
+
+				contaController.transferir(contaDTO.getNumero(), contaDTO.getSenha(), destino, valor);
+
+				break;
+			case LISTA_TODAS_AS_CONTAS_CLIENTE:
+				System.out.println("Digite o seu CPF");
+				String cpf = leTeclado.next();
+
+				List<Conta> contas = contaController.procurarContas(cpf);
+				// contas.forEach(System.out::println); //java8 +
+				
+				for (Conta conta2 : contas) {
+					System.out.println(conta2);
 				}
 
 				break;
@@ -98,7 +113,8 @@ public class UIBMain {
 		System.out.println("[3] - creditar em conta");
 		System.out.println("[4] - debitar em conta");
 		System.out.println("[5] - Transferir");
-		System.out.println("[6] - sair");
+		System.out.println("[6] - Lista todas as contas do cliente");
+		System.out.println("[7] - sair");
 	}
 
 	private static Cliente montaCliente() {
@@ -117,45 +133,22 @@ public class UIBMain {
 
 		System.out.println("Digite a sua senha");
 		String senha = leTeclado.next();
-		String senhaHash = SenhaUtil.geraHash(senha);
 
 		System.out.println("Digite valor do deposito inicial");
 		double saldoInicial = leTeclado.nextDouble();
 
-		String numero = Conta.gerarNumero();
-
-		Conta conta = new Conta(numero, saldoInicial, cliente, senhaHash);
+		Conta conta = new Conta(null, saldoInicial, cliente, senha);
 		return conta;
 	}
 
-	private static Conta buscarConta() {
+	private static ContaDTO transacaoComNumeroESenha() {
 		System.out.println("Digite o numero da Conta");
 		String numero = leTeclado.next();
 
 		System.out.println("Digite a sua senha");
 		String senha = leTeclado.next();
-		String senhaHash = SenhaUtil.geraHash(senha);
 
-		Conta conta = repositorioContasArray.procurar(numero, senhaHash);
-		if (conta != null) {
-			return conta;
-		}
-
-		System.out.println("Conta " + numero + " não encontrada!");
-		return null;
-	}
-
-	private static Conta buscarContaDestino() {
-		System.out.println("Digite o numero da Conta Destino");
-		String numero = leTeclado.next();
-
-		Conta conta = repositorioContasArray.procurar(numero);
-
-		if (conta != null) {
-			return conta;
-		}
-
-		System.out.println("Conta " + numero + " não encontrada!");
-		return null;
+		ContaDTO contaDTO = new ContaDTO(numero, senha);
+		return contaDTO;
 	}
 }

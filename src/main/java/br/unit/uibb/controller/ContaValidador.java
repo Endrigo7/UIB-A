@@ -13,7 +13,7 @@ public class ContaValidador {
 		}
 
 		if ((conta.getCliente().getCpf() == null) || //
-				(CPFValidador.isValidCPF(conta.getCliente().getCpf()))) {
+				(!CPFValidador.isValidCPF(conta.getCliente().getCpf()))) {
 			System.out.println("O CPF invalido!");
 			return false;
 		}
