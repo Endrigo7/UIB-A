@@ -9,7 +9,9 @@ public class Constantes {
 	public static final int DEBITAR = 4;
 	public static final int TRANSFERIR = 5;
 	public static final int LISTA_TODAS_AS_CONTAS_CLIENTE = 6;
-	public static final int SAIR = 7;
+	public static final int LISTA_TODOS_OS_CLIENTE = 7;
+	
+	public static final int SAIR = 151;
 	
 	private Constantes() {
 	}

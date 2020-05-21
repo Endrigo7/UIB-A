@@ -1,12 +1,18 @@
 package br.unit.uibb.controller;
 
 import br.unit.uibb.entidades.Conta;
-import br.unit.uibb.repository.ContasArrayDAO;
+import br.unit.uibb.repository.ContaDAOHibernate;
 import br.unit.uibb.util.CPFValidador;
 
 public class ContaValidador {
 	
-	private boolean validaCliente(Conta conta, ContasArrayDAO contaDao) {
+	private ContaDAOHibernate contaDao;
+	
+	public ContaValidador() {
+		contaDao = new ContaDAOHibernate();
+	}
+	
+	private boolean validaCliente(Conta conta) {
 		if (conta.getCliente() == null) {
 			System.out.println("A conta não possui cliente associado!");
 			return false;
@@ -21,25 +27,25 @@ public class ContaValidador {
 		return true;
 	}
 	
-	public boolean validaContaInserir(Conta conta, ContasArrayDAO contaDao) {
+	public boolean validaContaInserir(Conta conta) {
 		if (contaDao.existe(conta.getNumero())) {
 			System.out.println("A conta com este numero já existe!");
 			return false;
 		}
 		
-		return validaCliente(conta, contaDao);
+		return validaCliente(conta);
 	}
 	
-	public boolean validaContaAlterar(Conta conta, ContasArrayDAO contaDao) {
+	public boolean validaContaAlterar(Conta conta) {
 		if (!contaDao.existe(conta.getNumero())) {
 			System.out.println("A conta não está cadastrada!");
 			return false;
 		}
 		
-		return validaCliente(conta, contaDao);
+		return validaCliente(conta);
 	}
 	
-	public boolean validaTransacao(String numero, String senha, double valor, ContasArrayDAO contaDao) {
+	public boolean validaTransacao(String numero, String senha, double valor) {
 		if (valor < 0.1) {
 			System.out.println("Valor invalido");
 			return false;

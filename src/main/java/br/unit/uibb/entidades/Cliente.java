@@ -1,62 +1,36 @@
 package br.unit.uibb.entidades;
-public class Cliente {
-	
-	private String nome;
+
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Entity
+@Table(name = "CLIENTE")
+@NoArgsConstructor
+@AllArgsConstructor
+public class Cliente implements Serializable {
+
+	private static final long serialVersionUID = 9001780092108515333L;
+
+	@Id
+	@Column(name = "CPF")
 	private String cpf;
-	
-	public Cliente() {
-	}
-	
-	public Cliente(String nome, String cpf) {
-		this.nome = nome;
-		this.cpf = cpf;
-	}
-	
-	public String getNome() {
-		return nome;
-	}
-	
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-	
-	public String getCpf() {
-		return cpf;
-	}
-	
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((cpf == null) ? 0 : cpf.hashCode());
-		result = prime * result + ((nome == null) ? 0 : nome.hashCode());
-		return result;
-	}
+	@Column(name = "NOME", length = 70)
+	private String nome;
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cliente other = (Cliente) obj;
-		if (cpf == null) {
-			if (other.cpf != null)
-				return false;
-		} else if (!cpf.equals(other.cpf))
-			return false;
-		if (nome == null) {
-			if (other.nome != null)
-				return false;
-		} else if (!nome.equals(other.nome))
-			return false;
-		return true;
-	}
-	
+	@OneToMany(mappedBy = "cliente", fetch=FetchType.EAGER)
+	private List<Conta> contas;
+
 }

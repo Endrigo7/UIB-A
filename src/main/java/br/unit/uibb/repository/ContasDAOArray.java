@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import br.unit.uibb.entidades.Conta;
 
-public class ContasArrayDAO {
+public class ContasDAOArray {
 
 	private static final int CONTA_NAO_ENCONTRADA = -1;
 	private static final int TOTAL_CONTAS = 10;
@@ -15,7 +15,7 @@ public class ContasArrayDAO {
 	public Conta[] contas = new Conta[TOTAL_CONTAS];
 	private int posicao;
 
-	public ContasArrayDAO() {
+	public ContasDAOArray() {
 		posicao = 0;
 	}
 

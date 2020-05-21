@@ -5,18 +5,21 @@ import static br.unit.uibb.Constantes.CONSULTA_SALDO;
 import static br.unit.uibb.Constantes.CREDITAR;
 import static br.unit.uibb.Constantes.DEBITAR;
 import static br.unit.uibb.Constantes.LISTA_TODAS_AS_CONTAS_CLIENTE;
+import static br.unit.uibb.Constantes.LISTA_TODOS_OS_CLIENTE;
 import static br.unit.uibb.Constantes.SAIR;
 import static br.unit.uibb.Constantes.TRANSFERIR;
 
 import java.util.List;
 import java.util.Scanner;
 
+import br.unit.uibb.controller.ClienteController;
 import br.unit.uibb.controller.ContaController;
 import br.unit.uibb.entidades.Cliente;
 import br.unit.uibb.entidades.Conta;
 
 public class UIBMain {
 
+	private static ClienteController clienteController = new ClienteController();
 	private static ContaController contaController = new ContaController();
 	private static Scanner leTeclado = new Scanner(System.in);
 
@@ -93,6 +96,12 @@ public class UIBMain {
 				}
 
 				break;
+			case LISTA_TODOS_OS_CLIENTE:
+				System.out.println("Lista de todos nos clientes");
+				List<Cliente> clientes = clienteController.listaTodosClientes();
+				clientes.forEach(System.out::println);
+				
+				break;
 			case SAIR:
 				System.out.println("Obrigado por usa o  Unit Internet Bank");
 				System.out.println("--------------------------------------");
@@ -114,7 +123,8 @@ public class UIBMain {
 		System.out.println("[4] - debitar em conta");
 		System.out.println("[5] - Transferir");
 		System.out.println("[6] - Lista todas as contas do cliente");
-		System.out.println("[7] - sair");
+		System.out.println("[6] - Lista todos os cliente");
+		System.out.println("[151] - sair");
 	}
 
 	private static Cliente montaCliente() {
@@ -124,7 +134,7 @@ public class UIBMain {
 		System.out.println("Digite o nome do Cliente");
 		String nome = leTeclado.next();
 
-		Cliente cliente = new Cliente(nome, cpf);
+		Cliente cliente = new Cliente(cpf, nome, null);
 		return cliente;
 	}
 
@@ -135,9 +145,9 @@ public class UIBMain {
 		String senha = leTeclado.next();
 
 		System.out.println("Digite valor do deposito inicial");
-		double saldoInicial = leTeclado.nextDouble();
+		Double saldoInicial = leTeclado.nextDouble();
 
-		Conta conta = new Conta(null, saldoInicial, cliente, senha);
+		Conta conta = new Conta(null, cliente, saldoInicial, senha);
 		return conta;
 	}
 

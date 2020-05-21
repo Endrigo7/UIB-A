@@ -15,23 +15,23 @@ import br.unit.uibb.entidades.Conta;
 
 public class RepositorioContasArrayTest {
 	
-	private ContasArrayDAO repositorioContasArray;
+	private ContasDAOArray repositorioContasArray;
 	
 	private List<Conta> getContasDummy() {
-		Cliente clienteComMaisDe1Conta = new Cliente("Jair", "2");
+		Cliente clienteComMaisDe1Conta = new Cliente("Jair", "2", null);
 		
 		return asList(
-		 		   new Conta("1", 10, new Cliente("Jose", "1"), "abc"), // 
-		           new Conta("2", 20, clienteComMaisDe1Conta, "abc"), //
-		           new Conta("3", 50, new Cliente("Maria", "3"), "abc"), //
-		           new Conta("4", 11, new Cliente("Joaquina", "4"), "abc"), //
-		           new Conta("5", 10, clienteComMaisDe1Conta, "abc") //
+		 		   new Conta("1", new Cliente("Jose", "1", null), 10.0, "abc"), // 
+		           new Conta("2", clienteComMaisDe1Conta, 20.0, "abc"), //
+		           new Conta("3", new Cliente("Maria", "3", null), 50.0, "abc"), //
+		           new Conta("4", new Cliente("Joaquina", "4", null), 11.0, "abc"), //
+		           new Conta("5", clienteComMaisDe1Conta, 10.0, "abc") //
 				 );
 	}
 	
 	@Before
 	public void setup() {
-		repositorioContasArray = new ContasArrayDAO();
+		repositorioContasArray = new ContasDAOArray();
 		getContasDummy().forEach(conta -> repositorioContasArray.inserir(conta));
 	}
 	
@@ -45,7 +45,7 @@ public class RepositorioContasArrayTest {
 	
 	@Test
 	public void deveAtualizarContaQuandoContaExistirNoArray() {
-		Conta contaAtualizada = new Conta("2", 20, new Cliente("Jair Jose", "2"), "abc");
+		Conta contaAtualizada = new Conta("2", new Cliente("Jair Jose", "2", null), 20.0, "abc");
 		repositorioContasArray.atualizar(contaAtualizada);
 		
 		Conta contaRetornada = repositorioContasArray.procurar("2");
@@ -55,8 +55,8 @@ public class RepositorioContasArrayTest {
 	@Test
 	public void deveRetornarTodasAsContasDoClienteQuandoContaExistirNoArray() {
 		List<Conta> retornoEsperado = asList(
-		           new Conta("2", 20, new Cliente("Jair", "2"), "abc"), //
-		           new Conta("5", 10, new Cliente("Jair", "2"), "abc") //
+		           new Conta("2", new Cliente("Jair", "2", null), 20.0, "abc"), //
+		           new Conta("5", new Cliente("Jair", "2", null), 10.0, "abc") //
 				 );
 		
 		List<Conta> retornoObtido = repositorioContasArray.procurarContas("2");
@@ -67,8 +67,8 @@ public class RepositorioContasArrayTest {
 	@Test
 	public void deveRetornarTodasAsContasDoClienteQuandoContaExistirNoArrayComJava8() {
 		List<Conta> retornoEsperado = asList(
-		           new Conta("2", 20, new Cliente("Jair", "2"), "abc"), //
-		           new Conta("5", 10, new Cliente("Jair", "2"), "abc") //
+		           new Conta("2",new Cliente("Jair", "2", null), 20.0, "abc"), //
+		           new Conta("5", new Cliente("Jair", "2", null), 10.0, "abc") //
 				 );
 		
 		List<Conta> retornoObtido = repositorioContasArray.procurarContasJava8("2");
