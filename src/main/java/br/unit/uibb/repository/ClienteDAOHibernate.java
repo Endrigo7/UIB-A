@@ -43,7 +43,11 @@ public class ClienteDAOHibernate {
 			Query query = session.createQuery(hql, Cliente.class);
 			query.setParameter("cpf", cpf);
 			
-			return (Cliente) query.getSingleResult(); //
+			Cliente cliente = (Cliente) query.getSingleResult();
+			
+			session.close();
+			
+			return  cliente;
 		} catch (Exception e) {
 		}
 		return null;
