@@ -11,6 +11,7 @@ public class Constantes {
 	public static final int LISTA_TODAS_AS_CONTAS_CLIENTE = 6;
 	public static final int LISTA_TODOS_OS_CLIENTE = 7;
 	public static final int ATUALIZAR_CLIENTE = 8;
+	public static final int INATIVAR_CLIENTE = 9;
 	
 	public static final int SAIR = 151;
 	

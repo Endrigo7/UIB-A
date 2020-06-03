@@ -7,6 +7,7 @@ import br.unit.uibb.repository.ClienteDAOHibernate;
 
 public class ClienteController {
 
+	private static final Integer CLIENTE_STATUS_INVATIVO = 2;
 	private ClienteDAOHibernate clienteDao;
 
 	public ClienteController() {
@@ -28,6 +29,22 @@ public class ClienteController {
 	
 	public List<Cliente> listaTodosClientes() {
 		return clienteDao.getAll();
+	}
+	
+	public void inativarCliente(String cpf) {
+		Cliente cliente = clienteDao.procurar(cpf);
+		
+		if(cliente == null) {
+			throw new RuntimeException("Cliente não foi encontrado");
+		}
+		
+		if(CLIENTE_STATUS_INVATIVO.equals(cliente.getStatus()) ) {
+			throw new RuntimeException("Cliente já está desativado");
+		}
+		
+		cliente.setStatus(CLIENTE_STATUS_INVATIVO);
+		clienteDao.atualizar(cliente);
+		
 	}
 
 }

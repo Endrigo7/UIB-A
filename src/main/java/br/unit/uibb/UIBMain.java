@@ -5,6 +5,7 @@ import static br.unit.uibb.Constantes.ATUALIZAR_CLIENTE;
 import static br.unit.uibb.Constantes.CONSULTA_SALDO;
 import static br.unit.uibb.Constantes.CREDITAR;
 import static br.unit.uibb.Constantes.DEBITAR;
+import static br.unit.uibb.Constantes.INATIVAR_CLIENTE;
 import static br.unit.uibb.Constantes.LISTA_TODAS_AS_CONTAS_CLIENTE;
 import static br.unit.uibb.Constantes.LISTA_TODOS_OS_CLIENTE;
 import static br.unit.uibb.Constantes.SAIR;
@@ -116,6 +117,13 @@ public class UIBMain {
 				clienteController.atualizar(cliente);
 				
 				break;
+			case INATIVAR_CLIENTE:
+				System.out.println("Digite o seu CPF");
+				cpf = leTeclado.next();
+				
+				clienteController.inativarCliente(cpf);
+				
+				break;
 			case SAIR:
 				System.out.println("Obrigado por usa o  Unit Internet Bank");
 				System.out.println("--------------------------------------");
@@ -138,7 +146,8 @@ public class UIBMain {
 		System.out.println("[5] - Transferir");
 		System.out.println("[6] - Lista todas as contas do cliente");
 		System.out.println("[7] - Lista todos os cliente");
-		System.out.println("[8] - Atualizar Cliente cliente");
+		System.out.println("[8] - Atualizar Cliente");
+		System.out.println("[9] - Inativar Cliente");
 		System.out.println("[151] - sair");
 	}
 

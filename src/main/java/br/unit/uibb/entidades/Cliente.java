@@ -29,8 +29,17 @@ public class Cliente implements Serializable {
 
 	@Column(name = "NOME", length = 70)
 	private String nome;
-
+	
+	@Column(name = "STATUS")
+	private Integer status;
+	
 	@OneToMany(mappedBy = "cliente", fetch=FetchType.EAGER)
 	private List<Conta> contas;
 
+	public Cliente(String cpf, String nome, List<Conta> contas) {
+		super();
+		this.cpf = cpf;
+		this.nome = nome;
+		this.contas = contas;
+	}
 }
